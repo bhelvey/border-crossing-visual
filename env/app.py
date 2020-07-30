@@ -30,7 +30,19 @@ southStates = Base.classes.southStates
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("north_ports.html")
+
+@app.route("/south_ports")
+def south_port_page():
+    return render_template("south_ports.html")
+
+@app.route("/north_states")
+def north_states_page():
+    return render_template("north_states.html")
+
+@app.route("/south_states")
+def south_states_page():
+    return render_template("south_states.html")
 
 
 @app.route("/north_port")
@@ -41,9 +53,9 @@ def north_port_entrydata():
     for result in north_port_results:
         north_port_entry_info = {
             "id": result.A,
-            "port_name": result.PortName,
-            "date": result.Date,
-            "value": result.Value
+            "PortName": result.PortName,
+            "Date": result.Date,
+            "Value": result.Value
 
         }
 
@@ -59,9 +71,9 @@ def south_port_entrydata():
     for result in south_port_results:
         south_port_entry_info = {
             "id": result.A,
-            "port_name": result.PortName,
-            "date": result.Date,
-            "value": result.Value,
+            "PortName": result.PortName,
+            "Date": result.Date,
+            "Value": result.Value,
 
         }
 
@@ -69,36 +81,42 @@ def south_port_entrydata():
 
     return jsonify(south_port_info)
 
-@app.route("/state")
-def state_entrydata():
+@app.route("/north_state")
+def north_state_entrydata():
     session = Session(engine)
     north_state_results = session.query(northStates.A, northStates.State, northStates.Date, northStates.Value).all()
     north_state_info = []
     for result in north_state_results:
         north_state_entry_info = {
             "id": result.A,
-            "state": result.State,
-            "date": result.Date,
-            "value": result.Value,
+            "State": result.State,
+            "Date": result.Date,
+            "Value": result.Value,
 
         }
         
         north_state_info.append(north_state_entry_info)
-      
     
+    return jsonify(north_state_info)
+      
+@app.route("/south_state")
+def south_state_entrydata(): 
+    session = Session(engine)
     south_state_results = session.query(southStates.A, southStates.State, southStates.Date, southStates.Value).all()
     south_state_info = []
     for result in south_state_results:
         south_state_entry_info = {
             "id": result.A,
-            "state": result.State,
-            "date": result.Date,
-            "value": result.Value
+            "State": result.State,
+            "Date": result.Date,
+            "Value": result.Value
 
         }
 
+        
+
         south_state_info.append(south_state_entry_info)
-    return jsonify(north_state_info, south_state_info)
-    
+
+    return jsonify(south_state_info)
 if __name__ == "__main__":
     app.run(debug=True)
